@@ -6,8 +6,8 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.js"></script>
-		<script src="http://rawgithub.com/dataarts/dat.gui/master/build/dat.gui.min.js"></script>
-		<script src="http://threejs.org/examples/js/controls/TrackballControls.js"></script>
+		<script src="https://rawgithub.com/dataarts/dat.gui/master/build/dat.gui.min.js"></script>
+		<script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="js/SubdivisionModifier.js"></script>
 
@@ -18,8 +18,22 @@
 				margin: 0;
 				background-color: #1e1e1e;
 			}
+
+			#output {
+				width: 300px;
+				height: 200px;
+				position: absolute;
+				top: 2em;
+				border: 1px solid white;
+				z-index: 1000;
+			}
 		</style>
 	</head>
-<body><button onclick="reset()">new</button><div id="container"></div></body>
+<body>
+	<button onclick="reset()">new</button>
+	<button onclick="shot()">shot</button>
+	<div id="container"></div>
+	<canvas id="output"></canvas>
+</body>
 <script type="text/javascript" src="js/app.js"></script>
 </html>

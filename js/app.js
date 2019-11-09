@@ -1,9 +1,10 @@
 var stats, scene, renderer, composer;
 var camera, cameraControls, helper;
 var geometry, mesh, material;
+var c, ctx;
+var shoti=0, x=0, y=0;
 
 if( !init() )	animate();
-
 
 function grow(scale) {
   var normalMatrixWorld = new THREE.Matrix3();
@@ -51,6 +52,9 @@ function init_geometry() {
 
 function reset() {
   mesh.geometry = new THREE.IcosahedronGeometry(0.5, 2);
+  var texture = random_texture();
+  material = new THREE.MeshLambertMaterial({map: texture});
+  mesh.material = material;
   if(Math.random() > 0.1) grow(Math.random()/10.0);
   divide();
   if(Math.random() > 0.3) grow(Math.random()/100.0);
@@ -65,13 +69,40 @@ function reset() {
   mesh.rotateZ(2*Math.PI*Math.random());
 }
 
+function shot() {
+  y = shoti % 3;
+  x = x%3;
+  var strMime = "image/jpeg";
+  var imgData = renderer.domElement.toDataURL(strMime);
+
+  var image = new Image(window.innerWidth, window.innerHeight);
+  image.src = imgData;
+  image.onload = function() {
+    ctx.drawImage(image, x*c.width/3.0, y*c.height/3.0, c.width/3.0, c.height/3.0);
+    reset();
+    shoti++;
+    if(y == 2) x++;
+  }
+  console.log(shoti, x, y)
+}
+function random_texture() {
+  return texture = new THREE.TextureLoader().load( 'textures/t_'+Math.floor((Math.random())*15+1)+".jpg");
+}
+
 function init() {
   renderer = new THREE.WebGLRenderer({
     antialias: true,
+    preserveDrawingBuffer: true
   });
   renderer.setClearColor(0x1e1e1e);
 
   THREE.MOUSE.ROTATE = 0;
+
+  c = document.getElementById("output");
+
+  c.width = window.innerWidth*3;
+  c.height =  window.innerHeight*3
+  ctx = c.getContext("2d");
 
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.getElementById('container').appendChild(renderer.domElement);
@@ -82,13 +113,14 @@ function init() {
   camera.position.set(0, 0, 10);
   scene.add(camera);
 
-  var light = new THREE.HemisphereLight(0xffffff, 0x888888, 2);
+  var light = new THREE.HemisphereLight(0xffffff, 0x000000, 2);
   scene.add(light);
 
   cameraControls	= new THREE.TrackballControls(camera,  renderer.domElement);
 
   init_geometry()
 
+  var texture = random_texture();
   material = new THREE.MeshNormalMaterial();
   mesh = new THREE.Mesh( geometry, material );
   scene.add(mesh);
